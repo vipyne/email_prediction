@@ -25,3 +25,5 @@ puts "############## DATASET SEARCH"
 domain = "alphasights.com"
 
 assert(check_domains(domain) == true)
+
+p find_all domain

@@ -51,4 +51,21 @@ def check_domains domain
 end
 
 def find_all domain
+  matches = []
+  domain_groups = dataset.group_by do |pair|
+    pair[1].match(/[@].*/)
+  end
+  domain_groups
 end
+
+
+
+# values = log.group_by { |hash| hash[:time] }
+# log.clear
+# values.each_value { |value| log << value.inject(&:merge) }
+# log
+
+
+
+
+
