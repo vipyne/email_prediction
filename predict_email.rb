@@ -2,9 +2,6 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'dataset'
 
-name = "vanessa pyne"
-domain = "bah"
-
 
 # POTENIAL PATTERNS #########################
 class PotentialPatterns
@@ -31,21 +28,24 @@ class PotentialPatterns
   end
 
   def first_name_dot_last_initial name, domain
-    first_initial(name) + "." + last(name) + "@" + domain
+    first(name) + "." + last_initial(name) + "@" + domain
   end
 
   def first_initial_dot_last_name name, domain
+    first_initial(name) + "." + last(name) + "@" + domain
   end
 
   def first_initial_dot_last_initial name, domain
+    first_initial(name) + "." + last_initial(name) + "@" + domain
   end
 end
 
+name = "vanessa pyne"
+domain = "bah"
 
 test = PotentialPatterns.new
-puts test.first_initial name
 
 puts test.first_name_dot_last_name name, domain
 puts test.first_name_dot_last_initial name, domain
-# puts test.first_initial_dot_last_name name, domain
-# puts test.first_initial_dot_last_initial name, domain
+puts test.first_initial_dot_last_name name, domain
+puts test.first_initial_dot_last_initial name, domain
