@@ -3,7 +3,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'dataset'
 
 
-# POTENIAL PATTERNS #########################
+# POTENIAL EMAIL PATTERNS ###################
 class PotentialPatterns
   def first name
     name.match(/^[^\s]*/).to_s
@@ -39,13 +39,3 @@ class PotentialPatterns
     first_initial(name) + "." + last_initial(name) + "@" + domain
   end
 end
-
-name = "vanessa pyne"
-domain = "bah"
-
-test = PotentialPatterns.new
-
-puts test.first_name_dot_last_name name, domain
-puts test.first_name_dot_last_initial name, domain
-puts test.first_initial_dot_last_name name, domain
-puts test.first_initial_dot_last_initial name, domain
