@@ -39,3 +39,16 @@ class PotentialPatterns
     first_initial(name) + "." + last_initial(name) + "@" + domain
   end
 end
+
+# DATASET SEARCH ############################
+def check_domains domain
+  domains = dataset.values
+  domains.each do |email|
+    email.gsub!(/.*[@]/, "")
+  end
+  domains.uniq!
+  domains.include?(domain)
+end
+
+def find_all domain
+end
