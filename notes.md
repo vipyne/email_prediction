@@ -16,3 +16,6 @@ notes to myself on beginning / pseudocode:
 
 advisor class
 initialize with name and email
+
+
+create a domains key?

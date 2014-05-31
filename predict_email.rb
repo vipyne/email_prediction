@@ -41,14 +41,25 @@ class PotentialPatterns
 end
 
 # DATASET SEARCH ############################
-def check_domains domain
-  domains = dataset.values
-  domains.each do |email|
-    email.gsub!(/.*[@]/, "")
+class DataSearch
+  def find_uniq domain
+    domains = dataset.values
+    domains.each do |email|
+      email.gsub!(/.*[@]/, "")
+    end
+    domains.uniq!
   end
-  domains.uniq!
-  domains.include?(domain)
+
+  def check_domains domain
+    check = find_uniq domain
+    check.include? domain
+  end
+
+  def find_matching_email domain
+    matches = []
+    dataset.each { |name, email| matches << [name, email] if email.match(domain) }
+    matches.map { |data| Hash[*data] }
+  end
 end
 
-def find_all domain
-end
+
