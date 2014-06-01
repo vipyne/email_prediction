@@ -69,6 +69,17 @@ end
 #   end
 # end
 
+# VIEW ######################################
+class View
+  def cant_predict
+    "this email address does not match any of the potential patterns"
+  end
+
+  def new_domain
+      "this domain is new! so let's just try all potential patterns!"
+  end
+end
+
 # CONTROLLER ################################
 class Advisor
   def initialize name, domain
@@ -94,10 +105,10 @@ class Advisor
       when /[a-zA-Z]*\.[a-zA-Z]*@.*/
         @pattern.first_name_dot_last_name @name, @domain
       else
-        "this email address does not match any of the potential patterns"
+        cant_predict
       end
     else
-      "this domain is new! so let's just try all potential patterns!"
+      new_domain
     end
   end
 end
