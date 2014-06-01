@@ -66,40 +66,42 @@ end
 class Compare
   def check_existing dataset_by_domain
     patterns_of_email = []
-    p "dataset_by_domain" + dataset_by_domain.to_s
     dataset_by_domain.each do |pair|
       pair.each do |name, email|
-        p "email" + email
         case email
-        when /[a-zA-Z]{1}\.[a-zA-Z]{1}@.*/
+        when /\b[a-zA-Z]{1}\.[a-zA-Z]{1}@.*/
           patterns_of_email << :first_initial_dot_last_initial
-        when /[a-zA-Z]{1}\.[a-zA-Z]@.*/
+        when /\b[a-zA-Z]{1}\.[a-zA-Z]*@.*/
           patterns_of_email << :first_initial_dot_last_name
-        when /[a-zA-Z]*\.[a-zA-Z]{1}@.*/
+        when /\b[a-zA-Z]*\.[a-zA-Z]{1}@.*/
           patterns_of_email << :first_name_dot_last_initial
-        when /[a-zA-Z]*\.[a-zA-Z]*@.*/
+        when /\b[a-zA-Z]*\.[a-zA-Z]*@.*/
           patterns_of_email << :first_name_dot_last_name
         else
-          nil
+          patterns_of_email = [:first_initial_dot_last_initial,
+                               :first_initial_dot_last_name,
+                               :first_name_dot_last_initial,
+                               :first_name_dot_last_name]
+          patterns_of_email << :unidentified_pattern if email.match(/@/)
         end
-        p "patterns_of_email----" + patterns_of_email.to_s
       end
     end
-    p "patterns_of_email" + patterns_of_email.to_s
-    p patterns_of_email.class
-
-    patterns_of_email.uniq.length == 1 ? patterns_of_email : ["well shucks"]
+    patterns_of_email.uniq
   end
 end
 
 # VIEW ######################################
 class View
   def self.cant_predict
-    "this email address does not match any of the potential patterns"
+    puts "This email address does not match any of the potential patterns.  Let's just try all potential patterns!"
   end
 
   def self.new_domain
-      "this domain is new! so let's just try all potential patterns!"
+    puts "This domain is new! Let's just try all potential patterns!"
+  end
+
+  def self.general_error
+    puts "So sorry, something went wrong."
   end
 end
 
@@ -113,29 +115,31 @@ class Advisor
   end
 
   def predict
+    predictions = []
     DataSearch.find_uniq @domain
-    if DataSearch.check_domains @domain
-      matching = DataSearch.find_matching_email @domain
-      p matching
-      email = @compare.check_existing matching
-      p "*" * 50
-      p email.first
-      case email.first
+    View.new_domain unless DataSearch.check_domains @domain
+    matches = DataSearch.find_matching_email @domain
+    matches << {"all potential patterns" => "because there are no matches"} if matches == []
+    email_type = @compare.check_existing matches
+    email_type.each do |email|
+      case email
       when :first_initial_dot_last_initial
-        @pattern.first_initial_dot_last_initial @name, @domain
+        predictions << @pattern.first_initial_dot_last_initial(@name, @domain)
       when :first_initial_dot_last_name
-        @pattern.first_initial_dot_last_name @name, @domain
+        predictions << @pattern.first_initial_dot_last_name(@name, @domain)
       when :first_name_dot_last_initial
-        @pattern.first_name_dot_last_initial @name, @domain
+        predictions << @pattern.first_name_dot_last_initial(@name, @domain)
       when :first_name_dot_last_name
-        @pattern.first_name_dot_last_name @name, @domain
+        predictions << @pattern.first_name_dot_last_name(@name, @domain)
+      when :unidentified_pattern
+        View.cant_predict
       else
-        puts View.cant_predict
+        View.general_error
       end
-    else
-      puts View.new_domain
     end
+    predictions
   end
+
 end
 
 
