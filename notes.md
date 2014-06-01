@@ -19,3 +19,8 @@ initialize with name and email
 
 
 create a domains key?
+
+
+get hash with only matching domains
+run 4 methods on name
+see which ones match value

@@ -24,11 +24,11 @@ assert(test.first_initial_dot_last_initial(name, domain) == "v.p@bah")
 puts "############## DATASET SEARCH"
 domain = "alphasights.com"
 
-test2 = DataSearch.new
+assert(DataSearch.check_domains(domain) == true)
+assert(DataSearch.find_uniq(domain) == ["alphasights.com", "google.com", "apple.com"])
+assert(DataSearch.find_matching_email(domain) == [{"John Ferguson"=>"john.ferguson@alphasights.com"}, {"Damon Aw"=>"damon.aw@alphasights.com"}, {"Linda Li"=>"linda.li@alphasights.com"}])
 
-assert(test2.check_domains(domain) == true)
-assert(test2.find_uniq(domain) == ["alphasights.com", "google.com", "apple.com"])
-assert(test2.find_matching_email(domain) == [{"John Ferguson"=>"john.ferguson@alphasights.com"}, {"Damon Aw"=>"damon.aw@alphasights.com"}, {"Linda Li"=>"linda.li@alphasights.com"}])
+test3 = Advisor.new("vanessa pyne", "apple.com")
 
-
+p test3.predict
 
