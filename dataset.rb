@@ -6,6 +6,5 @@ def dataset
     "Larry Page" => "larry.p@google.com",
     "Sergey Brin" => "s.brin@google.com",
     "Steve Jobs" => "s.j@apple.com",
-    "this test" => "ruh_row@testing.com"
   }
 end
