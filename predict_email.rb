@@ -1,18 +1,20 @@
 # DATASET ###################################
+#############################################
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'dataset'
 
 
-# POTENIAL EMAIL PATTERNS ###################
+# POTENIAL PATTERNS #########################
+#############################################
 class PotentialPatterns
   def first name
-    name.match(/^[^\s]*/).to_s
+    name.match(/^[^\s]*/).to_s.downcase
   end
 
   def last name
     to_cut = name.dup
     to_cut.slice! name.match(/.*\s/).to_s
-    last_name = to_cut
+    last_name = to_cut.downcase
   end
 
   def first_initial name
@@ -40,7 +42,8 @@ class PotentialPatterns
   end
 end
 
-# DATASET SEARCH ############################
+# DATASEARCH ################################
+#############################################
 class DataSearch
   def self.find_uniq domain
     domains = dataset.values
@@ -64,7 +67,8 @@ class DataSearch
   end
 end
 
-# COMPARE AND PREDICT #######################
+# COMPARE ###################################
+#############################################
 class Compare
   def check_existing dataset_by_domain
     patterns_of_email = []
@@ -93,7 +97,20 @@ class Compare
 end
 
 # VIEW ######################################
+#############################################
 class View
+  def self.intro
+    puts "___________ADVISOR EMAIL PREDITOR______________"
+    puts "_______________________________________________"
+    puts ""
+  end
+
+  def self.lines
+    puts "_______________________________________________"
+    puts "_______________________________________________"
+    puts ""
+  end
+
   def self.cant_predict
     puts "This email address does not match any of the potential patterns.  Let's just try all potential patterns!"
   end
@@ -105,15 +122,34 @@ class View
   def self.general_error
     puts "So sorry, something went wrong."
   end
+
+  def self.label name
+    puts "Potential emails for #{name}:"
+  end
+
+  def self.show predictions
+    predictions.each { |email| puts "   " + email }
+    puts ""
+  end
 end
 
-# CONTROLLER ################################
+# ADVISOR ###################################
+#############################################
 class Advisor
   def initialize name, domain
     @name = name
     @domain = domain
     @pattern = PotentialPatterns.new
     @compare = Compare.new
+  end
+
+  def self.hard_coded_predictions
+    a = Advisor.new("Peter Wong", "alphasights.com")
+    b = Advisor.new("Craig Silverstein", "google.com")
+    c = Advisor.new("Steve Wozniak", "apple.com")
+    d = Advisor.new("Barack Obama", "whitehouse.gov")
+    examples = [a,b,c,d]
+    examples.each { |example| example.predict }
   end
 
   def predict
@@ -138,9 +174,26 @@ class Advisor
         View.general_error
       end
     end
+    View.label @name
+    View.show predictions
     predictions
   end
-
 end
 
+# CONTROLLER ################################
+#############################################
+class Controller
+  def self.run
+    View.intro
+    Advisor.hard_coded_predictions
+    View.lines
+    puts "Please enter advisor's first and last name:"
+    name = gets.chomp
+    puts "Please enter the company domain:"
+    domain = gets.chomp
+    new_advisor = Advisor.new(name, domain)
+    new_advisor.predict
+  end
+end
 
+Controller.run
