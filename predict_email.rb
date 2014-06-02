@@ -111,6 +111,18 @@ class View
     puts ""
   end
 
+  def self.get_name
+    puts "Please enter advisor's first and last name:"
+  end
+
+  def self.get_domain
+    puts "Please enter the company domain:"
+  end
+
+  def self.predict_another
+    puts "Would you like to enter another advisor name? (y/n)"
+  end
+
   def self.cant_predict
     puts "This email address does not match any of the potential patterns.  Let's just try all potential patterns!"
   end
@@ -178,22 +190,28 @@ class Advisor
     View.show predictions
     predictions
   end
-end
 
-# CONTROLLER ################################
-#############################################
-class Controller
+  def self.ask_and_predict
+    View.get_name
+    name = gets.chomp
+    View.get_domain
+    domain = gets.chomp
+    new_advisor = Advisor.new(name, domain)
+    puts ""
+    new_advisor.predict
+    View.predict_another
+    answer = gets.chomp
+    ask_and_predict if answer.downcase == "y"
+  end
+
   def self.run
     View.intro
     Advisor.hard_coded_predictions
     View.lines
-    puts "Please enter advisor's first and last name:"
-    name = gets.chomp
-    puts "Please enter the company domain:"
-    domain = gets.chomp
-    new_advisor = Advisor.new(name, domain)
-    new_advisor.predict
+    ask_and_predict
   end
 end
 
-Controller.run
+# CONTROLLER ################################
+#############################################
+Advisor.run
