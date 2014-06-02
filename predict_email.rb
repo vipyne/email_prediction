@@ -100,7 +100,7 @@ end
 #############################################
 class View
   def self.intro
-    puts "___________ADVISOR EMAIL PREDITOR______________"
+    puts "___________ADVISOR EMAIL PREDICTOR_____________"
     puts "_______________________________________________"
     puts ""
   end
