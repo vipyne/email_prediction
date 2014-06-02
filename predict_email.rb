@@ -58,7 +58,9 @@ class DataSearch
   def self.find_matching_email domain
     matches = []
     dataset.each { |name, email| matches << [name, email] if email.match(domain) }
-    matches.map { |data| Hash[*data] }
+    matches.map! { |data| Hash[*data] }
+    matches << {"dummy name" => "new domain"} if matches == []
+    matches
   end
 end
 
@@ -82,7 +84,7 @@ class Compare
                                :first_initial_dot_last_name,
                                :first_name_dot_last_initial,
                                :first_name_dot_last_name]
-          patterns_of_email << :unidentified_pattern if email.match(/@/)
+          patterns_of_email << :unidentified_pattern unless email.match("new domain")
         end
       end
     end
@@ -119,7 +121,6 @@ class Advisor
     DataSearch.find_uniq @domain
     View.new_domain unless DataSearch.check_domains @domain
     matches = DataSearch.find_matching_email @domain
-    matches << {"all potential patterns" => "because there are no matches"} if matches == []
     email_type = @compare.check_existing matches
     email_type.each do |email|
       case email
