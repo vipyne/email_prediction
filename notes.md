@@ -24,3 +24,6 @@ create a domains key?
 get hash with only matching domains
 run 4 methods on name
 see which ones match value
+
+advisor contoller seems a little fat, maybe should have moved
+hard coded examples
